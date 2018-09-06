@@ -9,5 +9,6 @@ public interface OnCorrectDescripListener {
     void onSetAdapter(ArrayList<String> array);
     void onCorrectToy(String msn);
     void onErrorToy(String msn);
+    void onSelectionCorrect(int id);
 
 }

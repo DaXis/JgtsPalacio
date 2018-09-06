@@ -17,6 +17,7 @@ import com.jgtspalacio.Singleton;
 import com.jgtspalacio.interfaces.DescripPresenter;
 import com.jgtspalacio.interfaces.DescripView;
 import com.jgtspalacio.objs.CardObj;
+import com.jgtspalacio.objs.ToyObj;
 import com.jgtspalacio.presenters.DescripPres;
 
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ public class DescripFragment extends Fragment implements View.OnClickListener, D
     private DescripPresenter descripPresenter;
     private ArrayAdapter<String> adapter;
     private CardObj cardObj;
+    private ToyObj toyObj;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,12 +64,14 @@ public class DescripFragment extends Fragment implements View.OnClickListener, D
         View rootView = inflater.inflate(R.layout.desc_frag, container, false);
 
         descripPresenter = new DescripPres(this);
+        toyObj = descripPresenter.getToyOj(cardObj.tag, sku);
 
         sku_txt = (TextView)rootView.findViewById(R.id.sku);
         descripPresenter.showSKU();
 
         spinner = (Spinner)rootView.findViewById(R.id.spinner);
         descripPresenter.setAdapter();
+        descripPresenter.setSelectionId(toyObj);
 
         refresh = (ImageView)rootView.findViewById(R.id.refresh);
         refresh.setOnClickListener(this);
@@ -85,7 +89,7 @@ public class DescripFragment extends Fragment implements View.OnClickListener, D
                 descripPresenter.onReturn();
                 break;
             case R.id.add_btn:
-                descripPresenter.addToy(cardObj, sku, Integer.parseInt(spinner.getSelectedItem().toString()));
+                descripPresenter.addToy(cardObj, toyObj, sku, Integer.parseInt(spinner.getSelectedItem().toString()));
                 break;
         }
     }
@@ -123,6 +127,11 @@ public class DescripFragment extends Fragment implements View.OnClickListener, D
     @Override
     public void addToCardMsn(String msn) {
         Singleton.genToast(msn);
+    }
+
+    @Override
+    public void setCantSpinner(int id) {
+        spinner.setSelection(id);
     }
 
 }

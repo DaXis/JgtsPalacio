@@ -19,7 +19,7 @@ public class DescripInter implements DescripInteractor {
 
     @Override
     public void showOptions(int option) {
-        if(option == 0){
+        if(option == 0 || option == 2){
             listener.onShowOptions();
         } else if (option == 1){
             listener.onHideOptions();
@@ -36,17 +36,37 @@ public class DescripInter implements DescripInteractor {
     }
 
     @Override
-    public void addToy(CardObj cardObj, String sku, int cant) {
-        ToyObj toyObj = new ToyObj();
-        toyObj.descrip = "Descripción";
-        toyObj.img_url = "url";
-        toyObj.sku = sku;
-        toyObj.tag = cardObj.tag;
-        toyObj.toy = "Juguete";
-        toyObj.cant = cant;
-        if(Singleton.getBdh().insertToToys(toyObj) > 0)
-            listener.onCorrectToy("Tu jeguete con SKU "+sku+" se ha agregado a tu carta");
-        else
-            listener.onErrorToy("Tu juguete con SKU "+sku+" ha tenido un problema y no fue agregado a tu carta");
+    public void addToy(CardObj cardObj, ToyObj toyObj, String sku, int cant) {
+        if(toyObj == null){
+            toyObj = new ToyObj();
+            toyObj.descrip = "Descripción";
+            toyObj.img_url = "url";
+            toyObj.sku = sku;
+            toyObj.tag = cardObj.tag;
+            toyObj.toy = "Juguete";
+            toyObj.cant = cant;
+            if(Singleton.getBdh().insertToToys(toyObj) > 0)
+                listener.onCorrectToy("Tu jeguete con SKU "+sku+" se ha agregado a tu carta");
+            else
+                listener.onErrorToy("Tu juguete con SKU "+sku+" ha tenido un problema y no fue agregado a tu carta");
+        } else {
+            if(Singleton.getBdh().changes(cardObj.tag, sku, cant) > 0)
+                listener.onCorrectToy("Se a actualizado la cantidad del juguete con SKU "+sku);
+        }
+    }
+
+    @Override
+    public ToyObj getToyObj(String tag, String skuId) {
+        return Singleton.getBdh().getToy(tag, skuId);
+    }
+
+    @Override
+    public void setSelectionId(ToyObj toyObj) {
+        if(toyObj != null){
+            if(toyObj.cant > 0){
+                int id = toyObj.cant -1;
+                listener.onSelectionCorrect(id);
+            }
+        }
     }
 }

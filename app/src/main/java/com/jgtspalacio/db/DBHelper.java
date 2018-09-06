@@ -146,4 +146,43 @@ public class DBHelper extends SQLiteOpenHelper {
         return array;
     }
 
+    public ToyObj getToy(String tag, String skuId){
+        String[] c = new String[]{id, this.tag, toy, sku, descrip, img_url, cant};
+        String[] args = {tag, skuId};
+        String w = this.tag + "=? AND "+sku+"=?";
+        Cursor cursor = Singleton.getDb().query(TOYS, c, w, args, null, null, null);
+
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        ToyObj toyObj = null;
+        while (!cursor.isAfterLast()) {
+            toyObj = new ToyObj();
+            toyObj.id = cursor.getInt(0);
+            toyObj.tag = cursor.getString(1);
+            toyObj.toy = cursor.getString(2);
+            toyObj.sku = cursor.getString(3);
+            toyObj.descrip = cursor.getString(4);
+            toyObj.img_url = cursor.getString(5);
+            toyObj.cant = cursor.getInt(6);
+            cursor.moveToNext();
+        }
+
+        return toyObj;
+    }
+
+    public static int changes(String arg1, String arg2, int arg3) {
+        ContentValues values = new ContentValues();
+        values.put(cant, arg3);
+        String[] args = {arg1, arg2};
+        String w = tag + "=? AND "+sku+"=?";
+        return Singleton.getDb().update(TOYS, values, w, args);
+    }
+
+    public static int deleteToy(ToyObj obj) {
+        String[] args = {obj.tag, obj.sku};
+        String w = tag + "=? AND "+sku+"=?";
+        return Singleton.getDb().delete(TOYS, w, args);
+    }
+
 }

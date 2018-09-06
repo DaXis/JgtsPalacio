@@ -34,7 +34,7 @@ public class ToysRecyclerAdapter extends RecyclerView.Adapter<ToysRecyclerAdapte
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.toy_name.setText(array.get(position).toy);
+        holder.toy_name.setText(array.get(position).toy +" "+array.get(position).sku);
         holder.toy_desc.setText(array.get(position).descrip);
         holder.toy_value.setText("$999 x "+array.get(position).cant);
     }
@@ -60,7 +60,10 @@ public class ToysRecyclerAdapter extends RecyclerView.Adapter<ToysRecyclerAdapte
             toy_value = (TextView)view.findViewById(R.id.toy_value);
 
             mas = (ImageView)view.findViewById(R.id.mas);
+            mas.setOnClickListener(this);
             menos = (ImageView)view.findViewById(R.id.menos);
+            menos.setOnClickListener(this);
+
             view.setOnClickListener(this);
         }
 
@@ -74,6 +77,11 @@ public class ToysRecyclerAdapter extends RecyclerView.Adapter<ToysRecyclerAdapte
 
     public void SetOnItemClickListener(final OnItemClick onItemClick){
         this.onItemClick = onItemClick;
+    }
+
+    public void updateAdapter(ArrayList<ToyObj> array){
+        this.array = array;
+        notifyDataSetChanged();
     }
 
 }

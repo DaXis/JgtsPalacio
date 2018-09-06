@@ -10,5 +10,6 @@ public interface DescripView {
     void hieOptions();
     void setAdapter(ArrayList<String> spinnerArray);
     void addToCardMsn(String msn);
+    void setCantSpinner(int id);
 
 }

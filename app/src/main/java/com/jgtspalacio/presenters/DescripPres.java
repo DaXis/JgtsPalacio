@@ -6,6 +6,7 @@ import com.jgtspalacio.interfaces.DescripPresenter;
 import com.jgtspalacio.interfaces.DescripView;
 import com.jgtspalacio.interfaces.OnCorrectDescripListener;
 import com.jgtspalacio.objs.CardObj;
+import com.jgtspalacio.objs.ToyObj;
 
 import java.util.ArrayList;
 
@@ -40,8 +41,18 @@ public class DescripPres implements DescripPresenter, OnCorrectDescripListener {
     }
 
     @Override
-    public void addToy(CardObj cardObj, String sku, int cant) {
-        descripInteractor.addToy(cardObj, sku, cant);
+    public void addToy(CardObj cardObj, ToyObj toyObj, String sku, int cant) {
+        descripInteractor.addToy(cardObj, toyObj, sku, cant);
+    }
+
+    @Override
+    public ToyObj getToyOj(String tag, String skuId) {
+        return descripInteractor.getToyObj(tag, skuId);
+    }
+
+    @Override
+    public void setSelectionId(ToyObj toyObj) {
+        descripInteractor.setSelectionId(toyObj);
     }
 
     @Override
@@ -67,5 +78,10 @@ public class DescripPres implements DescripPresenter, OnCorrectDescripListener {
     @Override
     public void onErrorToy(String msn) {
         descripView.addToCardMsn(msn);
+    }
+
+    @Override
+    public void onSelectionCorrect(int id) {
+        descripView.setCantSpinner(id);
     }
 }
